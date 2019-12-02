@@ -10,6 +10,32 @@
   https://aistudio.baidu.com/aistudio/projectDetail/176495?_=1575249248130  
 
 ## 方案说明
+本次比赛共提取了7组特征，然后进行融合：		
+1. 使用Images + Visit，采用SE-ResNeXt50和Resnet20_vd模型进行训练	
+2. 使用Images + Visit，采用Resnet50_vd和DPN26模型进行训练	
+3. 使用Images + Visit，采用Densenet121和ResNeXt20模型进行训练	
+4. 仅使用Visit，采用全连接FC1024模型进行训练	
+5. 使用Visit数据手动提取特征，根据每天流量进行提取	
+6. 使用Visit数据手动提取特征，基于严格高可信用户的规则	
+7. 使用Visit数据手动提取特征，基于广义高可信用户的规则	
+
+## 单模型脚本运行		
+1. 数据处理采用与官方baseline一致的方法，再data_process中先运行makelist.py生成不同的list，然后进行convert.py即可，此过程较慢，预计需要3-4个小时
+2. 使用cnn_combine下seresnext50_resnet20文件夹中的train_seresnext50_resnet20.py进行训练，infer_seresnext50_resnet20.py进行输出，将其中的数据集路径配置好即可	
+3. 使用cnn_combine下resnet50_dpn26文件夹中的train_resnet50_dpn26.py进行训练，infer_resnet50_dpn26.py进行输出，将其中的数据集路径配置好即可	
+4. 使用cnn_combine下densenet121_resnext20文件夹中的train_densenet121_resnext20.py进行训练，infer_densenet121_resnext20.py进行输出，将其中的数据集路径配置好即可	
+5. 使用cnn_txt下的train_cnn_txt.py进行训练，infer_cnn_txt.py进行输出，将其中的数据集路径配置好即可	
+6. 使用rule_feature下cxq_limit/cxq_limit.py提取特征，并生成probs文件用于融合	
+7. 使用rule_feature下cxq_wide/cxq_wide.py提取特征，并生成probs文件用于融合	
+8. 使用rule_feature下day_rule/day.py提取特征，并生成probs文件用于融合	
+
+## 特征融合脚本运行		
+1. 使用feature_stacking下的feature_stacking_probs.py脚本进行所有特征probs的融合
+2. 使用feature_stacking/vector_stacking下的train_feature_stacking.py脚本进行4-fold训练，其中需要手动修改每个fold的配置，infer_feature_stacking.py进行probs输出，将其中的数据集路径配置好即可	
+3. 使用feature_stacking/matrix_stacking下的train_matrix_stacking.py脚本进行4-fold训练，其中需要手动修改每个fold的配置，infer_matrix_stacking.py进行probs输出，将其中的数据集路径配置好即可	
+4. 最后使用feature_stacking下的vector_matrix_ensemble.py进行加权平均，输出最终结果		
+
+## 成绩记录
 ### 1. CNN Images + Visit
 |Index|Image Model|Visit Model|Local|LeaderBoard|
 |:---|:---|:---|:---|:---|

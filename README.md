@@ -1,2 +1,2 @@
-# Urban_Region_Function_Classification_-
+# Urban_Region_Function_Classification_飞桨基线挑战赛
 百度AiStudio飞桨基线挑战赛，第九名解决方案，使用PaddlePaddle
